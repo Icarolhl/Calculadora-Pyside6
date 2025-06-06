@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QGridLayout, QPushButton
-from utils import converToNumber, isEmpty, isNumOrDot, isValidNumber
+from utils import convertToNumber, isEmpty, isNumOrDot, isValidNumber
 from variables import MEDIUM_FONT_SIZE
 
 if TYPE_CHECKING:
@@ -116,7 +116,7 @@ class ButtonsGrid(QGridLayout):
         if not isValidNumber(displayText):
             return
 
-        number = converToNumber(displayText) * -1
+        number = convertToNumber(displayText) * -1
         self.display.setText(str(number))
 
     @Slot()
@@ -153,7 +153,7 @@ class ButtonsGrid(QGridLayout):
         # Se houver algo no número da esquerda,
         # não fazemos nada. Aguardaremos o número da direita.
         if self._left is None:
-            self._left = converToNumber(displayText)
+            self._left = convertToNumber(displayText)
 
         self._op = text
         self.equation = f'{self._left} {self._op} ??'
@@ -166,14 +166,14 @@ class ButtonsGrid(QGridLayout):
             self._showError('Conta incompleta.')
             return
 
-        self._right = converToNumber(displayText)
+        self._right = convertToNumber(displayText)
         self.equation = f'{self._left} {self._op} {self._right}'
         result = 'error'
 
         try:
             if '^' in self.equation and isinstance(self._left, (float, int)):
                 result = math.pow(self._left, self._right)
-                result = converToNumber(str(result))
+                result = convertToNumber(str(result))
             else:
                 result = eval(self.equation)
         except ZeroDivisionError:
